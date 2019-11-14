@@ -3,6 +3,9 @@
   <h2><a href="{{ story.url }}">{{story.title }}</a></h2>
   <p>{{ story.description }}
   <ul>
+  {% if story.characters %}
+  <li>Characters: {{ story.characters }}
+  {% endif %}
   <li>Chapters: {{ story.chapters }}</li>
   <li>Words: {{ story.words }}</li>
   </ul>
