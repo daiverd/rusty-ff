@@ -3,6 +3,7 @@ from datetime import datetime
 import sys, requests
 from bs4 import BeautifulSoup
 from fake_useragent import UserAgent
+from story import Story
 
 def download(url):
     headers = {'User-Agent': UserAgent().google}
@@ -26,17 +27,17 @@ def index():
  return render_template("index.html", stories=stories)
 
 def parse_stories(soup):
+ new_stories = [] 
  stories = soup.find_all("div", class_="z-list")
  for i in stories:
   i.a.img.extract()
-  i.a.wrap(soup.new_tag("h2"))
   icon = i.find("span", class_="icon-chevron-right")
   if icon:
    icon.parent.extract()
-  i.div.find(text=True).wrap(soup.new_tag("blockquote"))
   for link in i.find_all("a"):
    link["href"] = "https://www.fanfiction.net" + link["href"]
- return stories
+  new_stories.append(Story(i))
+ return new_stories
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

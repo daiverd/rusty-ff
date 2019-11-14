@@ -1,6 +1,11 @@
 {% macro show_stories(stories) %}
   {% for story in stories %}
-  {{ story|safe }}
+  <h2><a href="{{ story.url }}">{{story.title }}</a></h2>
+  <p>{{ story.description }}
+  <ul>
+  <li>Chapters: {{ story.chapters }}</li>
+  <li>Words: {{ story.words }}</li>
+  </ul>
   {% endfor %}
 {% endmacro %}
 
