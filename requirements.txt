@@ -1,6 +1,7 @@
 bs4
 fake-useragent
 Flask
+furl
 gunicorn
 requests
 WTForms==2.2.1
