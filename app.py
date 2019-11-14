@@ -2,9 +2,10 @@ from flask import Flask, session, redirect, url_for, escape, request, flash, ren
 from datetime import datetime
 import sys, requests
 from bs4 import BeautifulSoup
+from fake_useragent import UserAgent
 
 def download(url):
- headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
+    headers = {'User-Agent': UserAgent().google}
     r = requests.get(url,headers=headers)
     if r.history and ('Location' in r.history[-1].headers):
         url = r.history[-1].headers['Location']
@@ -29,7 +30,9 @@ def parse_stories(soup):
  for i in stories:
   i.a.img.extract()
   i.a.wrap(soup.new_tag("h2"))
-  i.find_all("a")[1].extract()
+  icon = i.find("span", class_="icon-chevron-right")
+  if icon:
+   icon.parent.extract()
   i.div.find(text=True).wrap(soup.new_tag("blockquote"))
   for link in i.find_all("a"):
    link["href"] = "https://www.fanfiction.net" + link["href"]
