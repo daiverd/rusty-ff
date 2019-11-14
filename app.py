@@ -22,7 +22,7 @@ app.secret_key = b'k7\xa0\r\xa1{\xd7\x87=\xae\x9a\x95ng\xbb\xd1'
 
 @app.route('/ff')
 def index():
- soup = download("https://www.fanfiction.net/book/Harry-Potter/")
+ soup = download("https://www.fanfiction.net/book/Harry-Potter/?&srt=1&lan=1&r=10&len=60&_c1=6&_pm=1")
  stories = parse_stories(soup)
  return render_template("index.html", stories=stories)
 
