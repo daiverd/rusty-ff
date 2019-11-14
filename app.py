@@ -4,6 +4,7 @@ import sys, requests
 from bs4 import BeautifulSoup
 from fake_useragent import UserAgent
 from story import Story
+from furl import furl
 
 def download(url):
     headers = {'User-Agent': UserAgent().google}
@@ -22,9 +23,17 @@ app.secret_key = b'k7\xa0\r\xa1{\xd7\x87=\xae\x9a\x95ng\xbb\xd1'
 
 @app.route('/ff')
 def index():
- soup = download("https://www.fanfiction.net/book/Harry-Potter/?&srt=1&lan=1&r=10&len=60&_c1=6&_pm=1")
+ return load_path("book/Harry-Potter/?&srt=1&lan=1&r=10&len=60&_c1=6&_pm=1")
+
+@app.route("/ff/<path:path>")
+def load_path(path):
+ f = furl()
+ f.args = request.args
+ url = "https://www.fanfiction.net/" + path + f.url
+ soup = download(url)
  stories = parse_stories(soup)
- return render_template("index.html", stories=stories)
+ pagination = parse_pagination(soup)
+ return render_template("index.html", stories=stories, pagination=pagination, title=soup.title.text)
 
 def parse_stories(soup):
  new_stories = [] 
@@ -38,6 +47,17 @@ def parse_stories(soup):
    link["href"] = "https://www.fanfiction.net" + link["href"]
   new_stories.append(Story(i))
  return new_stories
+
+def parse_pagination(soup):
+ pagination = soup.center
+ ul = soup.new_tag("ul")
+ ul["style"] = "list-style-type:none" 
+ soup.center.wrap(ul)
+ pagination.find(text=True).extract()
+ for link in pagination.find_all("a"):
+  link["href"] = "/ff" + link["href"]
+  link.wrap(soup.new_tag("li"))
+ return pagination.parent
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
