@@ -22,7 +22,7 @@ class Story(object):
 
  @property
  def _author(self):
-  return self.soup.find("div", class_="z-indent").find_previous("a")
+  return self.soup.find("a", {"href": re.compile(r"/u/")})
 
  @property
  def author(self):
