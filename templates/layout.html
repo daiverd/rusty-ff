@@ -1,0 +1,30 @@
+{% macro show_stories(stories) %}
+  {% for story in stories %}
+  <h2><a href="{{ story.url }}">{{story.title }}</a></h2>
+  <p><a href="{{ story.author_url }}">by {{ story.author }}</a></p>
+  <p>{{ story.description }}
+  <ul style="list-style:none">
+  {% if story.characters %}
+  <li>Characters: {{ story.characters }}
+  {% endif %}
+    <li>Words: {{ story.words }}</li>
+	<li>Chapters: {{ story.chapters }}</li>
+  </ul>
+  {% endfor %}
+{% endmacro %}
+
+<!doctype html>
+
+<title>{% block title %}My Application{% endblock %}</title>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+{% block header %}
+{% endblock %}
+{% block body %}{% endblock %}

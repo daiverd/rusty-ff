@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+{% block title %}
+Rusty ff - {{ title }}
+{% endblock %}
+
+{% block body %}
+<h1>Rusty ff - {{ title }}</h1>
+<h2>Jump to page</h2>
+{{ pagination|safe }}
+{{ show_stories(stories)|safe }}
+<h2>Jump to page</h2>
+{{ pagination|safe }}
+{% endblock %}
